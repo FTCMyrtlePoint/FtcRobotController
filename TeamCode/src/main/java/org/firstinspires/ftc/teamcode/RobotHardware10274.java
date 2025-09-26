@@ -65,18 +65,11 @@ public class RobotHardware10274 {
     private DcMotor blueDrive  = null;
     private DcMotor whiteDrive   = null;
     private DcMotor blackDrive  = null;
-    public DcMotor armMotor = null;
-
-    private DcMotor armMotor2 = null;
-    private DcMotor armMotor3 = null;
-    private Servo   Claw = null;
-    //private Servo   rightHand = null;
 
     // Define Drive constants.  Make them public so they CAN be used by the calling OpMode
-    public static final double MID_SERVO       =  0.9 ;
-    public static final double HAND_SPEED      =  0.02 ;  // sets rate to move servo
-    public static final double ARM_UP_POWER    =  0.45 ;
-    public static final double ARM_DOWN_POWER  = -0.45 ;
+    //public static final double MID_SERVO       =  0.9 ;
+    //public static final double HAND_SPEED      =  0.02 ;  // sets rate to move servo
+
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardware10274(LinearOpMode opmode) {
@@ -95,9 +88,7 @@ public class RobotHardware10274 {
         blueDrive = myOpMode.hardwareMap.get(DcMotor.class, "FrntRt");
         whiteDrive  = myOpMode.hardwareMap.get(DcMotor.class, "BackRt");
         blackDrive = myOpMode.hardwareMap.get(DcMotor.class, "FrntLft");
-        armMotor   = myOpMode.hardwareMap.get(DcMotor.class, "arm");
-        armMotor2   = myOpMode.hardwareMap.get(DcMotor.class, "arm2");
-        armMotor3   = myOpMode.hardwareMap.get(DcMotor.class, "arm3");
+
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -107,23 +98,21 @@ public class RobotHardware10274 {
         blackDrive.setDirection(DcMotor.Direction.FORWARD);
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
-        // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        armMotor.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
-        armMotor2.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
-        armMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        armMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armMotor3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        redDrive.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+        blueDrive.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+        whiteDrive.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+        blackDrive.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
 
 
 
 
         // Define and initialize ALL installed servos.
-        Claw = myOpMode.hardwareMap.get(Servo.class, "claw");
+        //Claw = myOpMode.hardwareMap.get(Servo.class, "claw");
 
 
         //rightHand = myOpMode.hardwareMap.get(Servo.class, "right_hand");
-        Claw.setPosition(MID_SERVO);
+        //Claw.setPosition(MID_SERVO);
         //rightHand.setPosition(MID_SERVO);
 
         myOpMode.telemetry.addData(">", "Hardware Initialized");
@@ -171,54 +160,16 @@ public class RobotHardware10274 {
         whiteDrive.setPower(BackRight);
     }
 
-    /**
-     * Pass the requested arm power to the appropriate hardware drive motor
-     *
-     * @param armV1 driving power (-1.0 to 1.0)
-     * @param armV2 driving power (-1.0 to 1.0)
-     * @param armV3 driving power (-1.0 to 1.0)
-     */
-    public void setArmPower(double armV1, double armV2, double armV3) {
-        armMotor.setPower(armV1);
 
-        armMotor2.setPower(armV2);
-
-        armMotor3.setPower(armV3);
-    }
-    /**
-     * Reset the encoders on the motors
-     */
-    public void ResetArms() {
-        armMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        //armMotor2.setMode(DcMotor.RunMode.RESET_ENCODERS);
-    }
     /**
      * Send the two hand-servos to opposing (mirrored) positions, based on the passed offset.
      *
      * @param offset
      */
-    public void setHandPositions(double offset) {
-        offset = Range.clip(offset, -0.8, 0);
-        Claw.setPosition(MID_SERVO + offset);
-        //rightHand.setPosition(MID_SERVO - offset);
-    }
-    /**
-     * Send the two hand-servos to opposing (mirrored) positions, based on the passed offset.
-     *
-     * @param armV1
-     * @param armV2
-     * @param armV3
-     */
-    public void setArmPositions(int arm1position, int arm2position,  double armV1, double armV2, double armV3) {
+    //public void setHandPositions(double offset) {
+    //    offset = Range.clip(offset, -0.8, 0);
+    //    Claw.setPosition(MID_SERVO + offset);
+    //    //rightHand.setPosition(MID_SERVO - offset);
+    //}
 
-        //armMotor.setTargetPosition(arm1position);
-        //armMotor2.setTargetPosition(arm2position);
-        //armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        //armMotor2.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(armV1);
-        armMotor2.setPower(armV2);
-        armMotor3.setPower(armV3);
-
-        //rightHand.setPosition(MID_SERVO - offset);
-    }
 }
