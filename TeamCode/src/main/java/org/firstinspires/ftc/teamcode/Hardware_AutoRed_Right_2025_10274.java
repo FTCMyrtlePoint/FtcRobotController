@@ -29,10 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
  * This OpMode illustrates how to use an external "hardware" class to modularize all the robot's sensors and actuators.
@@ -64,19 +63,28 @@ import com.qualcomm.robotcore.util.Range;
  *  Also add another new file named RobotHardware.java, select the sample with that name, and select Not an OpMode.
  */
 
-@TeleOp(name="Tele 4 wheels", group="RobotHdw10274")
-@Disabled
-public class Telleop4wheels10274 extends LinearOpMode {
+@Autonomous(name="AutoModeRed_Right_2025_10274", group="Robot")
+
+public class Hardware_AutoRed_Right_2025_10274 extends LinearOpMode {
 
     // Create a RobotHardware object to be used to access robot hardware.
     // Prefix any hardware functions with "robot." to access this class.
-    RobotHardware10274 robot       = new RobotHardware10274(this);
+    RobotHardware2025_10274 robot       = new RobotHardware2025_10274(this);
 
+    private ElapsedTime     runtime = new ElapsedTime();
     @Override
     public void runOpMode() {
         double front        = 0;
         double turn         = 0;
         double side        = 0;
+        double rampP        =0;
+        double SpinPower   =-1;
+        //double RampPower = -1;
+        boolean spin       = false;
+        boolean ramp = false;
+        double ground        = 0;
+        double middle = 0;
+        double hand_offset=0;
 
 
 
@@ -84,6 +92,9 @@ public class Telleop4wheels10274 extends LinearOpMode {
         robot.init();
 
         robot.driveRobot(front, side, turn);
+        robot.SetSpinPower(0);
+        //robot.SetRampPower(0);
+        //robot.SetRampMotors(ground, middle);
         // Send telemetry message to signify robot waiting;
         // Wait for the game to start (driver presses START)
         waitForStart();
@@ -97,23 +108,95 @@ public class Telleop4wheels10274 extends LinearOpMode {
 
 
 
-            front = -gamepad1.left_stick_y;
-            side = gamepad1.left_stick_x;
-            turn = -.75* gamepad1.right_stick_x;
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setHandPositions(hand_offset);
 
- 
             // Combine drive and turn for blended motion. Use RobotHardware class
             robot.driveRobot(front, side, turn);
 
-            // Use gamepad left & right Bumpers to open and close the claw
-            // Use the SERVO constants defined in RobotHardware class.
-            // Each time around the loop, the servos will move by a small amount.
-            // Limit the total offset to half of the full travel range
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = .5;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setHandPositions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = .5;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setHandPositions(hand_offset);
 
 
 
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 2.0)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = -.25;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setHandPositions(hand_offset);
 
 
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1.5)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setHandPositions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 30)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setHandPositions(hand_offset);
 
 
             // Send telemetry messages to explain controls and show robot status

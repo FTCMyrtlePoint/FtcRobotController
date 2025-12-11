@@ -55,7 +55,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Auto_Time 10274", group="Robot")
-
+@Disabled
 public class RobotAutoByTime_10274 extends LinearOpMode {
 
     RobotHardware10274 robot       = new RobotHardware10274(this);
