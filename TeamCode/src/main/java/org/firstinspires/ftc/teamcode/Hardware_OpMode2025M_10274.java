@@ -27,12 +27,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 /*
  * This OpMode illustrates how to use an external "hardware" class to modularize all the robot's sensors and actuators.
@@ -64,26 +70,67 @@ import com.qualcomm.robotcore.util.Range;
  *  Also add another new file named RobotHardware.java, select the sample with that name, and select Not an OpMode.
  */
 
-@TeleOp(name="Concept: Robot Hardware Class", group="Robot")
-@Disabled
-public class ConceptExternalHardwareClass extends LinearOpMode {
+@TeleOp(name="OpModeB2025_10274", group="Robot")
+
+public class Hardware_OpMode2025M_10274 extends LinearOpMode {
 
     // Create a RobotHardware object to be used to access robot hardware.
     // Prefix any hardware functions with "robot." to access this class.
-    RobotHardware   robot       = new RobotHardware(this);
+    RobotHardware2025M_10274 robot       = new RobotHardware2025M_10274(this);
+    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+    private Position cameraPosition = new Position(DistanceUnit.INCH,
+            0, 0, 0, 0);
+    private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
+            0, -90, 0, 0);
+    private AprilTagProcessor aprilTag;
+    private VisionPortal visionPortal;
+    private AprilTagDetection[] currentDetections;
 
     @Override
     public void runOpMode() {
-        double drive        = 0;
+        double front        = 0;
         double turn         = 0;
-        double arm          = 0;
-        double handOffset   = 0;
+        double side        = 0;
+        double rampP        =0;
+        double SpinPower   =-.75;
+        //double RampPower = -1;
+        boolean spin       = false;
+
+        double ground        = 0;
+        double middle = 0;
+        double Loader1_offset=0;
+        double Loader2_offset=0;
+        double Fire_offset=0;
+        boolean inlet=false;
+        boolean fire = true;
+        boolean firePM= true;
+
+        int a=1;
+        double speed=.07;
+
+        AprilTagProcessor tagProcessor = new AprilTagProcessor.Builder()
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagID(true)
+                .setDrawTagOutline(true)
+                .setLensIntrinsics(1091.52, 1091.52, 424.814, 286.607)
+                .build();
+
+
+        robot.initAprilTag();
+
+
+
+
 
         // initialize all the hardware, using the hardware class. See how clean and simple this is?
         robot.init();
 
+        robot.driveRobot(front, side, turn);
+        robot.SetSpinPower(0);
+
         // Send telemetry message to signify robot waiting;
-        // Wait for the game to start (driver presses PLAY)
+        // Wait for the game to start (driver presses START)
         waitForStart();
 
         // run until the end of the match (driver presses STOP)
@@ -92,47 +139,134 @@ public class ConceptExternalHardwareClass extends LinearOpMode {
             // Run wheels in POV mode (note: The joystick goes negative when pushed forward, so negate it)
             // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
             // This way it's also easy to just drive straight, or just turn.
-            drive = -gamepad1.left_stick_y;
-            turn  =  gamepad1.right_stick_x;
+
+            if(gamepad1.left_bumper)
+                a=-1;
+            if(gamepad1.right_bumper)
+                a=1;
+
+            front = a*gamepad1.left_stick_y;
+            side = a*-gamepad1.left_stick_x;
+            turn = -1* gamepad1.right_stick_x;
+
 
             // Combine drive and turn for blended motion. Use RobotHardware class
-            robot.driveRobot(drive, turn);
+            robot.driveRobot(front, side, turn);
 
-            // Use gamepad left & right Bumpers to open and close the claw
-            // Use the SERVO constants defined in RobotHardware class.
-            // Each time around the loop, the servos will move by a small amount.
-            // Limit the total offset to half of the full travel range
-            if (gamepad1.right_bumper)
-                handOffset += robot.HAND_SPEED;
-            else if (gamepad1.left_bumper)
-                handOffset -= robot.HAND_SPEED;
-            handOffset = Range.clip(handOffset, -0.5, 0.5);
 
-            // Move both servos to new position.  Use RobotHardware class
-            robot.setHandPositions(handOffset);
+            //ground = -gamepad2.left_stick_y;
+            //middle = -gamepad2.right_stick_y;
 
-            // Use gamepad buttons to move arm up (Y) and down (A)
-            // Use the MOTOR constants defined in RobotHardware class.
-            if (gamepad1.y)
-                arm = robot.ARM_UP_POWER;
-            else if (gamepad1.a)
-                arm = robot.ARM_DOWN_POWER;
-            else
-                arm = 0;
 
-            robot.setArmPower(arm);
+
+
+
+
+            if(gamepad1.x && spin)
+                spin=false;
+            if(gamepad1.y && !spin)
+                spin=true;
+
+
+
+
+            if(gamepad2.left_bumper && spin){
+                robot.SetSpinPower(-0.85);
+            }
+            else if(spin){
+                robot.SetSpinPower(SpinPower);
+            }
+            else{
+                if(gamepad2.right_trigger>.1){
+                    robot.SetSpinPower(-gamepad2.right_trigger);
+                }
+                else{
+                    robot.SetSpinPower(0);
+                }
+            }
+
+
+
+
+
+            if(gamepad2.a)
+                inlet=true;
+
+            if(gamepad2.b)
+                inlet=false;
+
+
+
+
+            if(gamepad2.y && fire)
+                fire=false;
+            if(!fire){
+                inlet=false;
+                if(firePM)
+                    Fire_offset+=speed;
+                if(Fire_offset>.99)
+                    firePM=false;
+            }
+            if(!firePM){
+                Fire_offset-=speed;
+                if(Fire_offset<.01) {
+                    fire = true;
+                    firePM = true;
+                    inlet=true;
+                }
+            }
+            if(inlet){
+                robot.setLoader1Positions(-1);
+            }
+            else{
+
+                if(gamepad2.x){
+                    robot.setLoader1Positions(1);
+                }
+                else{
+                    robot.setLoader1Positions(0);
+                }
+
+                    
+            }
+
+
+            robot.setFirePositions(Fire_offset);
+
+
+
+
+
+            if(gamepad2.dpad_down)
+                Loader1_offset=0;
+
+
+
+
+
+
+
+
+
+
 
             // Send telemetry messages to explain controls and show robot status
-            telemetry.addData("Drive", "Left Stick");
+            telemetry.addData("Front", "front");
+            telemetry.addData("Side", "Right Stick");
             telemetry.addData("Turn", "Right Stick");
-            telemetry.addData("Arm Up/Down", "Y & A Buttons");
-            telemetry.addData("Hand Open/Closed", "Left and Right Bumpers");
-            telemetry.addData("-", "-------");
+            robot.telemetryAprilTag();
+            if (tagProcessor.getDetections().size() > 0) {
+                AprilTagDetection tag = tagProcessor.getDetections().get(0);
 
-            telemetry.addData("Drive Power", "%.2f", drive);
-            telemetry.addData("Turn Power",  "%.2f", turn);
-            telemetry.addData("Arm Power",  "%.2f", arm);
-            telemetry.addData("Hand Position",  "Offset = %.2f", handOffset);
+                telemetry.addData("x", tag.ftcPose.x);
+                telemetry.addData("y", tag.ftcPose.y);
+                telemetry.addData("z", tag.ftcPose.z);
+                telemetry.addData("roll", tag.ftcPose.roll);
+                telemetry.addData("pitch", tag.ftcPose.pitch);
+                telemetry.addData("yaw", tag.ftcPose.yaw);
+                telemetry.update();
+
+            }
             telemetry.update();
 
             // Pace this loop so hands move at a reasonable speed.
