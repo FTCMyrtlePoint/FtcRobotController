@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -63,14 +62,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *  In OnBot Java, add a new OpMode, select this sample, and select TeleOp.
  *  Also add another new file named RobotHardware.java, select the sample with that name, and select Not an OpMode.
  */
-@Disabled
-@Autonomous(name="AutoModeRedGoal_2025_10274", group="Robot")
 
-public class Hardware_AutoRedGoal_2025_10274 extends LinearOpMode {
+@Autonomous(name="Auto On Goal Fire_Blue", group="Robot")
+
+public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
 
     // Create a RobotHardware object to be used to access robot hardware.
     // Prefix any hardware functions with "robot." to access this class.
-    RobotHardware2025_10274 robot       = new RobotHardware2025_10274(this);
+    RobotHardware2025M_10274 robot       = new RobotHardware2025M_10274(this);
 
     private ElapsedTime     runtime = new ElapsedTime();
     @Override
@@ -79,12 +78,13 @@ public class Hardware_AutoRedGoal_2025_10274 extends LinearOpMode {
         double turn         = 0;
         double side        = 0;
         double rampP        =0;
-        double SpinPower   =-1;
+        double SpinPower   =-.75;
         //double RampPower = -1;
         boolean spin       = false;
         boolean ramp = false;
         double ground        = 0;
         double middle = 0;
+
         double hand_offset=0;
 
 
@@ -126,54 +126,190 @@ public class Hardware_AutoRedGoal_2025_10274 extends LinearOpMode {
             }
 
             // Step 2:  Spin right for 1.3 seconds
+            front = -1;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 0.45)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(SpinPower);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
+
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(SpinPower);
+            hand_offset = 1;
+            robot.setFirePositions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setFirePositions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = -1;
+            robot.setLoader1Positions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(SpinPower);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(SpinPower);
+            hand_offset = 1;
+            robot.setFirePositions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setFirePositions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = -1;
+            robot.setLoader1Positions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(SpinPower);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(SpinPower);
+            hand_offset = 1;
+            robot.setFirePositions(hand_offset);
+
+
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
             front = 0;
             side = -.5;
             turn = 0;
             robot.driveRobot(front, side, turn);
             robot.SetSpinPower(0);
             hand_offset = 0;
-            robot.setLoader1Positions(hand_offset);
+            robot.setFirePositions(hand_offset);
 
 
             runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+            while (opModeIsActive() && (runtime.seconds() < 2)) {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
-
-            // Step 2:  Spin right for 1.3 seconds
-            front = .5;
-            side = 0;
-            turn = 0;
-            robot.driveRobot(front, side, turn);
-            robot.SetSpinPower(0);
-            hand_offset = 0;
-            robot.setLoader1Positions(hand_offset);
-
-
-
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-
-            // Step 2:  Spin right for 1.3 seconds
-            front = 0;
-            side = 0;
-            turn = .25;
-            robot.driveRobot(front, side, turn);
-            robot.SetSpinPower(0);
-            hand_offset = 0;
-            robot.setLoader1Positions(hand_offset);
-
-
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 2.0)) {
-                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-
             // Step 2:  Spin right for 1.3 seconds
             front = 0;
             side = 0;
@@ -181,7 +317,7 @@ public class Hardware_AutoRedGoal_2025_10274 extends LinearOpMode {
             robot.driveRobot(front, side, turn);
             robot.SetSpinPower(0);
             hand_offset = 0;
-            robot.setLoader1Positions(hand_offset);
+            robot.setFirePositions(hand_offset);
 
 
             runtime.reset();

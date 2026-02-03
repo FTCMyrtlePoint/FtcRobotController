@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -83,13 +84,17 @@ public class RobotHardware2025M_10274 {
     private DcMotor groundMotor   = null;
     private DcMotor midMotor  = null;
 
-    private Servo Hand = null;
-    private Servo Hold = null;
+    private CRServo Loader1 = null;
+    private Servo Loader2 = null;
+    private Servo Fire = null;
 
-    public double Holdoffset       =  0 ;
+    public double Loader1offset =  0 ;
+    public double Loader2offset =  0 ;
+    public double Fireoffset =  0 ;
     // Define Drive constants.  Make them public so they CAN be used by the calling OpMode
-    public static final double Hand_SERVO       =  0.5 ;
-    public static final double Hold_SERVO       =  0.5 ;
+    public static final double Loader1_SERVO =  0.5 ;
+    public static final double Loader2_SERVO =  0.01 ;
+    public static final double Fire_SERVO =  0.00 ;
     //public static final double HAND_SPEED      =  0.02 ;  // sets rate to move servo
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -160,16 +165,21 @@ public class RobotHardware2025M_10274 {
         //midMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Define and initialize ALL installed servos.
-        Hand = myOpMode.hardwareMap.get(Servo.class, "hand");
+        Loader1 = myOpMode.hardwareMap.get(CRServo.class, "FroLoa");
 
 
         //rightHand = myOpMode.hardwareMap.get(Servo.class, "right_hand");
-        Hand.setPosition(Hand_SERVO);
+        Loader1.setPower(0);
         //rightHand.setPosition(MID_SERVO);
 
-        Hold = myOpMode.hardwareMap.get(Servo.class, "hold");
+        Loader2 = myOpMode.hardwareMap.get(Servo.class, "MidLoa");
 
-        Hold.setPosition(Hold_SERVO);
+        Loader2.setPosition(Loader2_SERVO);
+
+
+        Fire = myOpMode.hardwareMap.get(Servo.class, "Fire");
+
+        Fire.setPosition(Fire_SERVO);
 
         myOpMode.telemetry.addData(">", "Hardware Initialized");
         myOpMode.telemetry.update();
@@ -186,10 +196,10 @@ public class RobotHardware2025M_10274 {
      */
     public void driveRobot(double Front, double Side,double Turn) {
         // Combine drive and turn for blended motion.
-        double FtLft  = Front + Side + Turn;
+        double FtLft  = -Front - Side - Turn;
         double FtRgt = -Front + Side + Turn;
-        double BkLft  = Front - Side + Turn;
-        double BkRgt = -Front - Side + Turn;
+        double BkLft  = -Front + Side - Turn;
+        double BkRgt = -Front - Side +Turn;
 
         FtLft = Range.clip(FtLft, -1, 1);
         FtRgt = Range.clip(FtRgt, -1, 1);
@@ -238,20 +248,21 @@ public class RobotHardware2025M_10274 {
      *
      * @param offset
      */
-    public void setHandPositions(double offset) {
-        offset = Range.clip(offset, -0.5, .4);
-        Hand.setPosition(Hand_SERVO + offset);
-        //rightHand.setPosition(MID_SERVO - offset);
+    public void setLoader1Positions(double offset) {
+        offset = Range.clip(offset, -1, 1);
+        Loader1.setPower(offset);
+
+        //if (Loader1.getPosition()>=.95)
+        //    Loader1.setPosition(Loader1_SERVO);
+
     }
 
-    public void setHoldPositions(boolean loaded) {
-       if(loaded)
-           Holdoffset = 0;
-       else
-           Holdoffset=.4;
 
-        Hold.setPosition(Hold_SERVO + Holdoffset);
-        //rightHand.setPosition(MID_SERVO - offset);
+    public void setFirePositions(double offset) {
+        offset = Range.clip(offset, 0, 1);
+        Fire.setPosition(Fire_SERVO + offset);
+        //if (Fire.getPosition()>=.95)
+        //    Fire.setPosition(Fire_SERVO);
     }
 
     public void telemetryAprilTag() {

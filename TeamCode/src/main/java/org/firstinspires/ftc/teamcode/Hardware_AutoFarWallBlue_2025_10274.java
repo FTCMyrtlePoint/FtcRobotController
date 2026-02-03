@@ -29,16 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
  * This OpMode illustrates how to use an external "hardware" class to modularize all the robot's sensors and actuators.
@@ -70,56 +63,27 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
  *  Also add another new file named RobotHardware.java, select the sample with that name, and select Not an OpMode.
  */
 
-@TeleOp(name="OpModeB2025_10274", group="Robot")
-
-public class Hardware_OpMode2025M_10274 extends LinearOpMode {
+@Autonomous(name="AutoModeBlue_Left_2025_10274", group="Robot")
+public class Hardware_AutoFarWallBlue_2025_10274 extends LinearOpMode {
 
     // Create a RobotHardware object to be used to access robot hardware.
     // Prefix any hardware functions with "robot." to access this class.
     RobotHardware2025M_10274 robot       = new RobotHardware2025M_10274(this);
-    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
-    private Position cameraPosition = new Position(DistanceUnit.INCH,
-            0, 0, 0, 0);
-    private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
-            0, -90, 0, 0);
-    private AprilTagProcessor aprilTag;
-    private VisionPortal visionPortal;
-    private AprilTagDetection[] currentDetections;
 
+    private ElapsedTime     runtime = new ElapsedTime();
     @Override
     public void runOpMode() {
         double front        = 0;
         double turn         = 0;
         double side        = 0;
         double rampP        =0;
-        double SpinPower   =-.75;
+        double SpinPower   =-1;
         //double RampPower = -1;
         boolean spin       = false;
-
+        boolean ramp = false;
         double ground        = 0;
         double middle = 0;
-        double Loader1_offset=0;
-        double Loader2_offset=0;
-        double Fire_offset=0;
-        boolean inlet=false;
-        boolean fire = true;
-        boolean firePM= true;
-
-        int a=1;
-        double speed=.07;
-
-        AprilTagProcessor tagProcessor = new AprilTagProcessor.Builder()
-                .setDrawAxes(true)
-                .setDrawCubeProjection(true)
-                .setDrawTagID(true)
-                .setDrawTagOutline(true)
-                .setLensIntrinsics(1091.52, 1091.52, 424.814, 286.607)
-                .build();
-
-
-        robot.initAprilTag();
-
-
+        double hand_offset=0;
 
 
 
@@ -128,7 +92,8 @@ public class Hardware_OpMode2025M_10274 extends LinearOpMode {
 
         robot.driveRobot(front, side, turn);
         robot.SetSpinPower(0);
-
+        //robot.SetRampPower(0);
+        //robot.SetRampMotors(ground, middle);
         // Send telemetry message to signify robot waiting;
         // Wait for the game to start (driver presses START)
         waitForStart();
@@ -140,133 +105,104 @@ public class Hardware_OpMode2025M_10274 extends LinearOpMode {
             // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
             // This way it's also easy to just drive straight, or just turn.
 
-            if(gamepad1.left_bumper)
-                a=-1;
-            if(gamepad1.right_bumper)
-                a=1;
 
-            front = a*gamepad1.left_stick_y;
-            side = a*-gamepad1.left_stick_x;
-            turn = -1* gamepad1.right_stick_x;
 
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
 
             // Combine drive and turn for blended motion. Use RobotHardware class
             robot.driveRobot(front, side, turn);
 
-
-            //ground = -gamepad2.left_stick_y;
-            //middle = -gamepad2.right_stick_y;
-
-
-
-
-
-
-            if(gamepad1.x && spin)
-                spin=false;
-            if(gamepad1.y && !spin)
-                spin=true;
-
-
-
-
-            if(gamepad2.left_bumper && spin){
-                robot.SetSpinPower(-0.85);
-            }
-            else if(spin){
-                robot.SetSpinPower(SpinPower);
-            }
-            else{
-                if(gamepad2.right_trigger>.1){
-                    robot.SetSpinPower(-gamepad2.right_trigger);
-                }
-                else{
-                    robot.SetSpinPower(0);
-                }
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
             }
 
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
 
 
-
-
-            if(gamepad2.a)
-                inlet=true;
-
-            if(gamepad2.b)
-                inlet=false;
-
-
-
-
-            if(gamepad2.y && fire)
-                fire=false;
-            if(!fire){
-                inlet=false;
-                if(firePM)
-                    Fire_offset+=speed;
-                if(Fire_offset>.99)
-                    firePM=false;
-            }
-            if(!firePM){
-                Fire_offset-=speed;
-                if(Fire_offset<.01) {
-                    fire = true;
-                    firePM = true;
-                    inlet=true;
-                }
-            }
-            if(inlet){
-                robot.setLoader1Positions(-1);
-            }
-            else{
-
-                if(gamepad2.x){
-                    robot.setLoader1Positions(1);
-                }
-                else{
-                    robot.setLoader1Positions(0);
-                }
-
-                    
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
             }
 
-
-            robot.setFirePositions(Fire_offset);
-
-
-
-
-
-            if(gamepad2.dpad_down)
-                Loader1_offset=0;
-
+            // Step 2:  Spin right for 1.3 seconds
+            front = -.5;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
 
 
 
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1.5)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
 
 
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 1.5)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
 
 
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 30)) {
+                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
 
+            // Step 2:  Spin right for 1.3 seconds
+            front = 0;
+            side = 0;
+            turn = 0;
+            robot.driveRobot(front, side, turn);
+            robot.SetSpinPower(0);
+            hand_offset = 0;
+            robot.setLoader1Positions(hand_offset);
 
 
             // Send telemetry messages to explain controls and show robot status
             telemetry.addData("Front", "front");
             telemetry.addData("Side", "Right Stick");
             telemetry.addData("Turn", "Right Stick");
-            robot.telemetryAprilTag();
-            if (tagProcessor.getDetections().size() > 0) {
-                AprilTagDetection tag = tagProcessor.getDetections().get(0);
 
-                telemetry.addData("x", tag.ftcPose.x);
-                telemetry.addData("y", tag.ftcPose.y);
-                telemetry.addData("z", tag.ftcPose.z);
-                telemetry.addData("roll", tag.ftcPose.roll);
-                telemetry.addData("pitch", tag.ftcPose.pitch);
-                telemetry.addData("yaw", tag.ftcPose.yaw);
-                telemetry.update();
-
-            }
             telemetry.update();
 
             // Pace this loop so hands move at a reasonable speed.

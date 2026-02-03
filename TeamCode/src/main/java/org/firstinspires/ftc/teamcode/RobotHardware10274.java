@@ -166,7 +166,7 @@ public class RobotHardware10274 {
      *
      * @param offset
      */
-    //public void setHandPositions(double offset) {
+    //public void setLoader1Positions(double offset) {
     //    offset = Range.clip(offset, -0.8, 0);
     //    Claw.setPosition(MID_SERVO + offset);
     //    //rightHand.setPosition(MID_SERVO - offset);

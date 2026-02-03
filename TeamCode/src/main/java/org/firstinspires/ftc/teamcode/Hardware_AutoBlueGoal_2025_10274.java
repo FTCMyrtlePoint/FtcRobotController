@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -62,7 +63,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *  In OnBot Java, add a new OpMode, select this sample, and select TeleOp.
  *  Also add another new file named RobotHardware.java, select the sample with that name, and select Not an OpMode.
  */
-
+@Disabled
 @Autonomous(name="AutoModeBlueGoal_2025_10274", group="Robot")
 
 public class Hardware_AutoBlueGoal_2025_10274 extends LinearOpMode {
@@ -113,7 +114,7 @@ public class Hardware_AutoBlueGoal_2025_10274 extends LinearOpMode {
             turn = 0;
             robot.SetSpinPower(0);
             hand_offset = 0;
-            robot.setHandPositions(hand_offset);
+            robot.setLoader1Positions(hand_offset);
 
             // Combine drive and turn for blended motion. Use RobotHardware class
             robot.driveRobot(front, side, turn);
@@ -131,7 +132,7 @@ public class Hardware_AutoBlueGoal_2025_10274 extends LinearOpMode {
             robot.driveRobot(front, side, turn);
             robot.SetSpinPower(0);
             hand_offset = 0;
-            robot.setHandPositions(hand_offset);
+            robot.setLoader1Positions(hand_offset);
 
 
             runtime.reset();
@@ -147,7 +148,7 @@ public class Hardware_AutoBlueGoal_2025_10274 extends LinearOpMode {
             robot.driveRobot(front, side, turn);
             robot.SetSpinPower(0);
             hand_offset = 0;
-            robot.setHandPositions(hand_offset);
+            robot.setLoader1Positions(hand_offset);
 
 
 
@@ -164,7 +165,7 @@ public class Hardware_AutoBlueGoal_2025_10274 extends LinearOpMode {
             robot.driveRobot(front, side, turn);
             robot.SetSpinPower(0);
             hand_offset = 0;
-            robot.setHandPositions(hand_offset);
+            robot.setLoader1Positions(hand_offset);
 
 
             runtime.reset();
@@ -180,7 +181,7 @@ public class Hardware_AutoBlueGoal_2025_10274 extends LinearOpMode {
             robot.driveRobot(front, side, turn);
             robot.SetSpinPower(0);
             hand_offset = 0;
-            robot.setHandPositions(hand_offset);
+            robot.setLoader1Positions(hand_offset);
 
 
             runtime.reset();
@@ -196,7 +197,7 @@ public class Hardware_AutoBlueGoal_2025_10274 extends LinearOpMode {
             robot.driveRobot(front, side, turn);
             robot.SetSpinPower(0);
             hand_offset = 0;
-            robot.setHandPositions(hand_offset);
+            robot.setLoader1Positions(hand_offset);
 
 
             // Send telemetry messages to explain controls and show robot status

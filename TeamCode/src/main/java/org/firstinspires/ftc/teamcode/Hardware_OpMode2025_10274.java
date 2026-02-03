@@ -32,10 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
@@ -75,7 +72,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
  */
 
 @TeleOp(name="OpMode2025_10274", group="Robot")
-
+@Disabled
 public class Hardware_OpMode2025_10274 extends LinearOpMode {
 
     // Create a RobotHardware object to be used to access robot hardware.
@@ -96,14 +93,25 @@ public class Hardware_OpMode2025_10274 extends LinearOpMode {
         double turn         = 0;
         double side        = 0;
         double rampP        =0;
-        double SpinPower   =-1;
+        double SpinPower   =-.75;
         //double RampPower = -1;
         boolean spin       = false;
-        boolean ramp = false;
+
         double ground        = 0;
         double middle = 0;
-        double hand_offset=0;
-        boolean loaded = true;
+        double Loader1_offset=0;
+        double Loader2_offset=0;
+        double Fire_offset=0;
+        boolean Fnt = true;
+        boolean FntPM=true;
+        boolean Mid=true;
+        boolean MidPM=true;
+        boolean fire = true;
+        boolean firePM= true;
+
+        int a=1;
+        double speed=.07;
+
         AprilTagProcessor tagProcessor = new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
@@ -124,8 +132,7 @@ public class Hardware_OpMode2025_10274 extends LinearOpMode {
 
         robot.driveRobot(front, side, turn);
         robot.SetSpinPower(0);
-       // robot.SetRampPower(0);
-        //robot.SetRampMotors(ground, middle);
+
         // Send telemetry message to signify robot waiting;
         // Wait for the game to start (driver presses START)
         waitForStart();
@@ -137,22 +144,25 @@ public class Hardware_OpMode2025_10274 extends LinearOpMode {
             // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
             // This way it's also easy to just drive straight, or just turn.
 
+            if(gamepad1.left_bumper)
+                a=-1;
+            if(gamepad1.right_bumper)
+                a=1;
 
-
-            front = gamepad1.left_stick_y;
-            side = -gamepad1.left_stick_x;
-            turn = -.75* gamepad1.right_stick_x;
+            front = a*gamepad1.left_stick_y;
+            side = a*-gamepad1.left_stick_x;
+            turn = -1* gamepad1.right_stick_x;
 
 
             // Combine drive and turn for blended motion. Use RobotHardware class
             robot.driveRobot(front, side, turn);
 
 
-            ground = -gamepad2.left_stick_y;
-            middle = -gamepad2.right_stick_y;
+            //ground = -gamepad2.left_stick_y;
+            //middle = -gamepad2.right_stick_y;
 
 
-           // robot.SetRampMotors(ground, middle);
+
 
 
 
@@ -161,54 +171,94 @@ public class Hardware_OpMode2025_10274 extends LinearOpMode {
         if(gamepad1.y && !spin)
             spin=true;
 
-        if(gamepad2.dpad_left && ramp)
-            ramp=false;
-        if(gamepad2.dpad_right && !ramp)
-            ramp=true;
 
 
-       /* if(ramp){
-            rampP= gamepad2.left_stick_y;
-            robot.SetRampPower(rampP);
+
+        if(gamepad2.left_bumper && spin){
+            robot.SetSpinPower(-0.85);
         }
-
-        if(!ramp){
-            robot.SetRampPower(0);
-        }*/
-
-        if(spin){
+        else if(spin){
             robot.SetSpinPower(SpinPower);
         }
         else{
-            robot.SetSpinPower(0);
-        }
-
-        if(gamepad2.b){
-            loaded=false;
-            hand_offset=.4;
-        }
-        if(gamepad2.x){
-            loaded=false;
-            hand_offset=.1;
-        }
-
-        if (gamepad2.a && loaded) {
-             hand_offset = 0;
+            if(gamepad2.right_trigger>.1){
+                robot.SetSpinPower(-gamepad2.right_trigger);
+            }
+            else{
+                robot.SetSpinPower(0);
+            }
         }
 
 
-        if (gamepad2.a && !loaded) {
-            hand_offset = .1;
-        }
 
+
+
+        if(gamepad2.y && Fnt && Mid)
+            Fnt=false;
+        if(!Fnt){
+            if(FntPM)
+                Loader1_offset+=speed;
+            if(Loader1_offset>.5)
+                FntPM=false;
+        }
+        if(!FntPM){
+            Loader1_offset-=speed;
+            if(Loader1_offset<-.5) {
+                Fnt = true;
+                FntPM = true;
+            }
+        }
+        robot.setLoader1Positions(Loader1_offset);
+
+        if(gamepad2.x && Fnt && fire)
+            Mid=false;
+        if(!Mid && Fnt && fire){
+            if(MidPM)
+                Loader2_offset+=speed;
+            if(Loader2_offset>.99)
+                MidPM=false;
+        }
+        if(!MidPM){
+            Loader2_offset-=speed;
+            if(Loader2_offset<.01){
+                MidPM=true;
+                Mid=true;
+            }
+        }
+        robot.setLoader2Positions(Loader2_offset);
+
+        if(gamepad2.a && fire && Mid)
+            fire=false;
+        if(!fire){
+            if(firePM)
+                Fire_offset+=speed;
+            if(Fire_offset>.99)
+                firePM=false;
+        }
+        if(!firePM){
+            Fire_offset-=speed;
+            if(Fire_offset<.01) {
+                fire = true;
+                firePM = true;
+            }
+        }
+        robot.setFirePositions(Fire_offset);
+
+
+
+
+        if(gamepad2.dpad_left)
+            Loader1_offset=-.49;
         if(gamepad2.dpad_down)
-            loaded=true;
+            Loader1_offset=0;
+        if(gamepad2.dpad_up)
+            Loader2_offset=-0;
+        if(gamepad2.dpad_right)
+            Fire_offset=0;
 
-        if(gamepad2.y){
-            hand_offset=-.5;
-        }
-        robot.setHoldPositions(loaded);
-        robot.setHandPositions(hand_offset);
+
+
+
 
 
 

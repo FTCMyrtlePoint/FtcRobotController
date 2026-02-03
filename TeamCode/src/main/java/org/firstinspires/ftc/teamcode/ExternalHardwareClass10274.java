@@ -162,7 +162,7 @@ public class ExternalHardwareClass10274 extends LinearOpMode {
             handOffset = Range.clip(handOffset, -0.9, .1);
 
             // Move both servos to new position.  Use RobotHardware class
-            //robot.setHandPositions(handOffset);
+            //robot.setLoader1Positions(handOffset);
 
             // Use gamepad buttons to move arm up (Y) and down (A)
             // Use the MOTOR constants defined in RobotHardware class.
