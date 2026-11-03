@@ -78,7 +78,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
         double turn         = 0;
         double side        = 0;
         double rampP        =0;
-        double SpinPower   =-.75;
+        double SpinPower   =-.8;
         //double RampPower = -1;
         boolean spin       = false;
         boolean ramp = false;
@@ -125,7 +125,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 1: Move away from goal for .45 seconds
             front = -1;
             side = 0;
             turn = 0;
@@ -141,7 +141,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 2:  Turn on launching wheel
             front = 0;
             side = 0;
             turn = 0;
@@ -158,7 +158,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 3: Launch first ball
             front = 0;
             side = 0;
             turn = 0;
@@ -174,7 +174,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 4: Turn off launching wheel
             front = 0;
             side = 0;
             turn = 0;
@@ -189,7 +189,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 5: Turn on intake, pushing second ball into launching position
             front = 0;
             side = 0;
             turn = 0;
@@ -200,11 +200,11 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
 
 
             runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1)) {
+            while (opModeIsActive() && (runtime.seconds() < 2)) {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 6: Turn on launching wheel
             front = 0;
             side = 0;
             turn = 0;
@@ -219,7 +219,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 7: Launch second ball
             front = 0;
             side = 0;
             turn = 0;
@@ -234,7 +234,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 8: Turn off launching wheel
             front = 0;
             side = 0;
             turn = 0;
@@ -249,7 +249,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 9: Turn on intake, pushing third ball into launching position
             front = 0;
             side = 0;
             turn = 0;
@@ -260,12 +260,12 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
 
 
             runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1)) {
+            while (opModeIsActive() && (runtime.seconds() < 3)) {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 10: Turn on launch wheel
             front = 0;
             side = 0;
             turn = 0;
@@ -280,7 +280,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 11: Launch third ball
             front = 0;
             side = 0;
             turn = 0;
@@ -295,9 +295,9 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
-
+            // Step 12: Move to the side, moving off of the line
             front = 0;
-            side = -.5;
+            side = -.75;
             turn = 0;
             robot.driveRobot(front, side, turn);
             robot.SetSpinPower(0);
@@ -310,7 +310,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
                 telemetry.update();
             }
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 13: Turn everything off
             front = 0;
             side = 0;
             turn = 0;
@@ -326,7 +326,7 @@ public class Hardware_BlueOnGoal_Fire_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Do nothing
             front = 0;
             side = 0;
             turn = 0;

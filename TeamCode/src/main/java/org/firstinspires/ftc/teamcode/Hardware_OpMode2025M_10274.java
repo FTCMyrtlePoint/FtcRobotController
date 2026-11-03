@@ -92,7 +92,7 @@ public class Hardware_OpMode2025M_10274 extends LinearOpMode {
         double turn         = 0;
         double side        = 0;
         double rampP        =0;
-        double SpinPower   =-.75;
+        double SpinPower   =-.8;
         //double RampPower = -1;
         boolean spin       = false;
 
@@ -161,7 +161,8 @@ public class Hardware_OpMode2025M_10274 extends LinearOpMode {
 
 
 
-
+            // If gamepad 1 button Y is pressed, launch wheel turns on. If gamepad button X is
+            // pressed, launch wheel turns off
             if(gamepad1.x && spin)
                 spin=false;
             if(gamepad1.y && !spin)
@@ -169,13 +170,15 @@ public class Hardware_OpMode2025M_10274 extends LinearOpMode {
 
 
 
-
+            // While gamepad left bumper is pressed and held, spin power is increased from -.75 to -.85
             if(gamepad2.left_bumper && spin){
-                robot.SetSpinPower(-0.85);
+                robot.SetSpinPower(-0.9);
             }
             else if(spin){
                 robot.SetSpinPower(SpinPower);
             }
+            // Alternate method to activate launch wheel, gamepad 2 left trigger can turn on and control
+            // the speed that the launch wheel moves
             else{
                 if(gamepad2.right_trigger>.1){
                     robot.SetSpinPower(-gamepad2.right_trigger);
@@ -188,7 +191,8 @@ public class Hardware_OpMode2025M_10274 extends LinearOpMode {
 
 
 
-
+            // If gamepad 2 button A is pressed, inlet is turned on. If gamepad button B is pressed,
+            // inlet is turned off.
             if(gamepad2.a)
                 inlet=true;
 
@@ -197,7 +201,9 @@ public class Hardware_OpMode2025M_10274 extends LinearOpMode {
 
 
 
-
+            // If gamepad 2 button Y is pressed, the ball in launch position will be launched and inlet
+            // will automatically turn on to push remaining balls towards launch position. May only be
+            // turned off by pressing gamepad button B.
             if(gamepad2.y && fire)
                 fire=false;
             if(!fire){
@@ -215,11 +221,13 @@ public class Hardware_OpMode2025M_10274 extends LinearOpMode {
                     inlet=true;
                 }
             }
+            // If inlet is activated, servo will turn with a power of -1, moving balls towards launch position
             if(inlet){
                 robot.setLoader1Positions(-1);
             }
             else{
-
+                // While gamepad 2 button X is pressed and held, servo will turn backwards allowing robot to
+                // spit unwanted balls out of the inlet
                 if(gamepad2.x){
                     robot.setLoader1Positions(1);
                 }

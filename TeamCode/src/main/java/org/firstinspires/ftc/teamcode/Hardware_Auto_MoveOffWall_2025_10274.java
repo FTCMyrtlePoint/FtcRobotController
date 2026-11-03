@@ -63,8 +63,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *  Also add another new file named RobotHardware.java, select the sample with that name, and select Not an OpMode.
  */
 
-@Autonomous(name="AutoModeBlue_Left_2025_10274", group="Robot")
-public class Hardware_AutoFarWallBlue_2025_10274 extends LinearOpMode {
+@Autonomous(name="AutoMode_MoveOffWall_2025_10274", group="Robot")
+public class Hardware_Auto_MoveOffWall_2025_10274 extends LinearOpMode {
 
     // Create a RobotHardware object to be used to access robot hardware.
     // Prefix any hardware functions with "robot." to access this class.
@@ -123,7 +123,7 @@ public class Hardware_AutoFarWallBlue_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 1: Do nothing for 1 second
             front = 0;
             side = 0;
             turn = 0;
@@ -139,7 +139,7 @@ public class Hardware_AutoFarWallBlue_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 2:  Move forward for 1.5 seconds
             front = -.5;
             side = 0;
             turn = 0;
@@ -156,7 +156,7 @@ public class Hardware_AutoFarWallBlue_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 3: Do nothing
             front = 0;
             side = 0;
             turn = 0;
@@ -172,7 +172,7 @@ public class Hardware_AutoFarWallBlue_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 4: Do nothing
             front = 0;
             side = 0;
             turn = 0;
@@ -188,7 +188,7 @@ public class Hardware_AutoFarWallBlue_2025_10274 extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Step 2:  Spin right for 1.3 seconds
+            // Step 5: Do nothing
             front = 0;
             side = 0;
             turn = 0;
