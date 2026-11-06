@@ -31,10 +31,20 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.List;
 
 /*
  * This file works in conjunction with the External Hardware Class sample called: ConceptExternalHardwareClass.java
@@ -55,10 +65,11 @@ import com.qualcomm.robotcore.util.Range;
  *
  */
 
-public class RobotHardware10274 {
+public class RobotHardware2026_10274 {
 
     /* Declare OpMode members. */
     private LinearOpMode myOpMode = null;   // gain access to methods in the calling OpMode.
+
 
     // Define Motor and Servo objects  (Make them private so they can't be accessed externally)
     private DcMotor redDrive   = null;
@@ -66,13 +77,41 @@ public class RobotHardware10274 {
     private DcMotor whiteDrive   = null;
     private DcMotor blackDrive  = null;
 
+    //private DcMotor LaunchSpin   = null;
+
+
+
+    //private Servo Loader1 = null;
+    //private Servo Loader2 = null;
+    //private Servo Fire = null;
+/*
+    public double Loader1offset =  0 ;
+    public double Loader2offset =  0 ;
+    public double Fireoffset =  0 ;
     // Define Drive constants.  Make them public so they CAN be used by the calling OpMode
-    //public static final double MID_SERVO       =  0.9 ;
+    public static final double Loader1_SERVO =  0.5 ;
+    public static final double Loader2_SERVO =  0.01 ;
+    public static final double Fire_SERVO =  0.00 ;
     //public static final double HAND_SPEED      =  0.02 ;  // sets rate to move servo
+*/
+
+    /*
+    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+    private Position cameraPosition = new Position(DistanceUnit.INCH,
+            0, 0, 0, 0);
+    private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
+            0, -90, 0, 0);
+    private AprilTagProcessor aprilTag;
+    private VisionPortal visionPortal;
+    private AprilTagDetection[] currentDetections;
+
+*/
+
+
 
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
-    public RobotHardware10274(LinearOpMode opmode) {
+    public RobotHardware2026_10274(LinearOpMode opmode) {
         myOpMode = opmode;
     }
 
@@ -89,6 +128,10 @@ public class RobotHardware10274 {
         whiteDrive  = myOpMode.hardwareMap.get(DcMotor.class, "BackRt");
         blackDrive = myOpMode.hardwareMap.get(DcMotor.class, "FrntLft");
 
+
+        //LaunchSpin  = myOpMode.hardwareMap.get(DcMotor.class, "LdrSpin");
+
+
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -97,24 +140,39 @@ public class RobotHardware10274 {
         whiteDrive.setDirection(DcMotor.Direction.FORWARD);
         blackDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
-
-        redDrive.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
-        blueDrive.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
-        whiteDrive.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
-        blackDrive.setZeroPowerBehavior(ZeroPowerBehavior.BRAKE);
+        //LaunchSpin.setDirection(DcMotor.Direction.REVERSE);
 
 
+        // Motors
 
+        redDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        blueDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        whiteDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        blackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+//        LaunchSpin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+
+/*
 
         // Define and initialize ALL installed servos.
-        //Claw = myOpMode.hardwareMap.get(Servo.class, "claw");
+        Loader1 = myOpMode.hardwareMap.get(Servo.class, "FroLoa");
 
 
         //rightHand = myOpMode.hardwareMap.get(Servo.class, "right_hand");
-        //Claw.setPosition(MID_SERVO);
+        Loader1.setPosition(Loader1_SERVO);
         //rightHand.setPosition(MID_SERVO);
 
+        Loader2 = myOpMode.hardwareMap.get(Servo.class, "MidLoa");
+
+        Loader2.setPosition(Loader2_SERVO);
+
+
+        Fire = myOpMode.hardwareMap.get(Servo.class, "Fire");
+
+        Fire.setPosition(Fire_SERVO);
+*/
         myOpMode.telemetry.addData(">", "Hardware Initialized");
         myOpMode.telemetry.update();
     }
@@ -130,10 +188,10 @@ public class RobotHardware10274 {
      */
     public void driveRobot(double Front, double Side,double Turn) {
         // Combine drive and turn for blended motion.
-        double FtLft  = Front + Side + Turn;
+        double FtLft  = -Front - Side - Turn;
         double FtRgt = -Front + Side + Turn;
-        double BkLft  = Front - Side + Turn;
-        double BkRgt = -Front - Side + Turn;
+        double BkLft  = -Front + Side - Turn;
+        double BkRgt = -Front - Side +Turn;
 
         FtLft = Range.clip(FtLft, -1, 1);
         FtRgt = Range.clip(FtRgt, -1, 1);
@@ -160,16 +218,88 @@ public class RobotHardware10274 {
         whiteDrive.setPower(BackRight);
     }
 
+   /* public void SetSpinPower(double power) {
+        // Output the values to the motor drives.
+        Spin1.setPower(power);
+    }*/
 
-    /**
+    /*public void SetRampPower(double power) {
+        // Output the values to the motor drives.
+        rampMotor.setPower(power);
+    }
+
+    public void SetRampMotors(double power1, double power2) {
+        // Output the values to the motor drives.
+        groundMotor.setPower(power1);
+        midMotor.setPower(power2);
+
+    }*/
+
+    /*
      * Send the two hand-servos to opposing (mirrored) positions, based on the passed offset.
      *
      * @param offset
      */
-    //public void setLoader1Positions(double offset) {
-    //    offset = Range.clip(offset, -0.8, 0);
-    //    Claw.setPosition(MID_SERVO + offset);
-    //    //rightHand.setPosition(MID_SERVO - offset);
-    //}
+    /*
+    public void setLoader1Positions(double offset) {
+        offset = Range.clip(offset, -.5, .5);
+        Loader1.setPosition(Loader1_SERVO + offset);
 
+        //if (Loader1.getPosition()>=.95)
+        //    Loader1.setPosition(Loader1_SERVO);
+
+    }
+
+    public void setLoader2Positions(double offset) {
+        offset = Range.clip(offset, 0, .99);
+        Loader2.setPosition(Loader2_SERVO + offset);
+        //if (Loader2.getPosition()>=.95)
+        //    Loader2.setPosition(Loader2_SERVO);
+    }
+
+    public void setFirePositions(double offset) {
+        offset = Range.clip(offset, 0, 1);
+        Fire.setPosition(Fire_SERVO + offset);
+        //if (Fire.getPosition()>=.95)
+        //    Fire.setPosition(Fire_SERVO);
+    }
+*/
+    /*
+    public void telemetryAprilTag() {
+
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        myOpMode.telemetry.addData("# AprilTags Detected", currentDetections.size());
+
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null) {
+                myOpMode.telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                myOpMode.telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+                myOpMode.telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+                myOpMode.telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+            } else {
+                myOpMode.telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
+                myOpMode.telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
+            }
+        }
+        myOpMode.telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
+        myOpMode.telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
+        myOpMode.telemetry.addLine("RBE = Range, Bearing & Elevation");
+        myOpMode.telemetry.update();
+
+    }
+    public void initAprilTag() {
+
+        // Create the AprilTag processor the easy way.
+        aprilTag = AprilTagProcessor.easyCreateWithDefaults();
+
+        // Create the vision portal the easy way.
+        if (USE_WEBCAM) {
+            visionPortal = VisionPortal.easyCreateWithDefaults(
+                    myOpMode.hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
+        }
+        else {
+            visionPortal = VisionPortal.easyCreateWithDefaults(
+                    BuiltinCameraDirection.BACK, aprilTag);
+        }
+    }*/
 }

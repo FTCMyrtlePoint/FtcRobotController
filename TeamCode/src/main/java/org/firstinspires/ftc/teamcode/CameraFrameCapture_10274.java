@@ -60,7 +60,7 @@ import java.util.Locale;
  */
 
 @TeleOp(name = "CameraFrameCapture_10274", group = "Robot")
-
+@Disabled
 public class CameraFrameCapture_10274 extends LinearOpMode
 {
     /*

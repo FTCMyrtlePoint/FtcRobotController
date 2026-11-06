@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -64,12 +65,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Auto On Goal Fire_Red", group="Robot")
-
+@Disabled
 public class Hardware_RedOnGoal_Fire_2025_10274 extends LinearOpMode {
 
     // Create a RobotHardware object to be used to access robot hardware.
     // Prefix any hardware functions with "robot." to access this class.
-    RobotHardware2025M_10274 robot       = new RobotHardware2025M_10274(this);
+    RobotHardware2025_10274 robot       = new RobotHardware2025_10274(this);
 
     private ElapsedTime     runtime = new ElapsedTime();
     @Override
